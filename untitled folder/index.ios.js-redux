@@ -1,0 +1,41 @@
+import React, { Component } from 'react';
+
+import {
+  AppRegistry,
+} from 'react-native';
+
+import { Provider, connect } from 'react-redux'
+
+import { Router, Scene } from 'react-native-router-flux'
+
+import configureStore from './src/store/configureStore'
+
+import App from './src/containers/App'
+
+const RouterWithRedux = connect()(Router)
+
+const store = configureStore()
+
+const component = App
+
+export default class LazyDays extends Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <RouterWithRedux>
+          <Scene key="tabbar">
+            <Scene
+              key="app"
+              component={component}
+              initial={true}
+              title="Main"
+              hideNavBar={true}
+            />
+          </Scene>
+        </RouterWithRedux>
+      </Provider>
+    );
+  }
+}
+
+AppRegistry.registerComponent('LazyDays', () => LazyDays);
