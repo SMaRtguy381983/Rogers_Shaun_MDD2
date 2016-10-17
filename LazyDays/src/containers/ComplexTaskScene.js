@@ -17,13 +17,19 @@ import {
 
 export default class ComplexTaskScene extends Component {
   render() {
+    const genres = this.props.task.genres
+
+    // Loop over genres and put them into a carosuel ;)
+
     return (
       <TouchableWithoutFeedback onPress={this.props.chooseTask}>
         <View style={styles.container}>
 
-          <Text style={styles.welcome}>{this.props.task.id}-{this.props.task.type}</Text>
+          <Text style={styles.welcome}>LazyDays</Text>
 
-          <Text>Tap to Choose Again</Text>
+          <Text style={styles.h1}>{this.props.task.id}-{this.props.task.type}</Text>
+
+          <Text style={styles.instructions}>Tap to Choose Again</Text>
 
         </View>
       </TouchableWithoutFeedback>
@@ -33,18 +39,31 @@ export default class ComplexTaskScene extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF'
+    backgroundColor: '#43204E',
+    flex: 1,
+    justifyContent: 'center'
   },
   welcome: {
-    fontSize: 20,
+    color: 'rgba(241, 203, 108, .10)',
+    fontFamily: 'Snell Roundhand',
+    fontSize: 60,
+    fontWeight: '900',
     textAlign: 'center',
-    margin: 10
+    margin: 10,
   },
-  instructions: {textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5
+  h1: {
+    color: '#F1CB6C',
+    fontFamily: 'Helvetica Neue',
+    fontSize: 20,
+    fontWeight: '900',
+    margin: 10,
+    textAlign: 'center'
+  },
+  instructions: {
+    color: '#8F596A',
+    fontFamily: 'Helvetica Neue',
+    marginBottom: 5,
+    textAlign: 'center'
   }
 })

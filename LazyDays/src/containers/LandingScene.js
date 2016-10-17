@@ -42,8 +42,8 @@ export default class LandingScene extends Component {
 
         // console.log(`new number: ${randomId}`)
 
-        // randomId = 1, // Forces simple task
-        randomId = 0 // Forces complex task
+        randomId = 1 // Forces simple task
+        // randomId = 0 // Forces complex task
       }
 
       // console.log(tasks)
