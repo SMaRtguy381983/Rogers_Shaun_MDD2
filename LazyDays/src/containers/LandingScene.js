@@ -23,49 +23,74 @@ const firebaseapp = initializeApp({
 })
 
 export default class LandingScene extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      randomIds: []
+    }
+  }
+
+  contains(needle, hay) {
+    if ((hay === String(hay) || hay === Array(hay)) && hay.length) {
+      for (let i = 0; i < hay.length; i++) {
+        if (hay[i] === needle) {
+          return true
+        }
+      }
+    }
+
+    return false
+  }
+
   chooseTask() {
-
-    // Create reference to tasks
     const tasksRef = firebaseapp.database().ref('tasks')
-
-    // Store randomId to only choose once
-    let randomId
 
     tasksRef.on('value', (snapshot) => {
       const tasks = snapshot.val() || undefined
 
-      if (!randomId) {
-        const min = 0 // Math.ceil(0)
-        const max = Math.floor(Object.keys(tasks).length)
+      const min = 0 // Math.ceil(0)
 
+      const max = Object.keys(tasks).length // Math.floor()
+
+      let randomId
+
+      while (!randomId || this.state.randomIds.includes(randomId)) {
         randomId = Math.floor(Math.random() * (max - min)) + min
-
-        // console.log(`new number: ${randomId}`)
-
-        randomId = 1 // Forces simple task
-        // randomId = 0 // Forces complex task
       }
 
-      // console.log(tasks)
+      this.state.randomIds.push(randomId)
 
-      Object.keys(tasks).forEach((aTask) => {
-        const task = tasks[aTask]
+      console.log(this.state.randomIds)
 
-        // console.log(`task: ${task}`)
+      // > #, the number at which to allow a previous randomId
+      if (this.state.randomIds.length > 0) {
+        this.state.randomIds.shift()
 
-        if (randomId === task.id) {
-          // console.log(`task: ${task}, type: ${task.type}`)
+        console.log(this.state.randomIds)
+      }
 
-          // Navigate to task
-          if (task.type === 'simple') {
-            Actions.simpleTaskScene({ task, chooseTask: this.chooseTask })
-          } else if (task.type === 'complex') {
-            Actions.complexTaskScene({ task, chooseTask: this.chooseTask })
-          } else {
-            console.warn(`unexpected task.type in chooseTask(), got: ${task.type}`)
-          }
-        }
-      })
+      // randomId = 0 // Forces simple bubble-bath task
+      // randomId = 9 // Forces complex movie task
+      // randomId = 8 // Forces complex video-game task
+
+      const chosenTask = tasks[Object.keys(tasks)[randomId]]
+
+      // console.log(chosenTask)
+      // console.log(`type: ${chosenTask.type}`)
+
+      const payload = {
+        chosenTask,
+        chooseTask: this.chooseTask.bind(this)
+      }
+
+      if (chosenTask.type === 'simple') {
+        Actions.simpleTaskScene(payload)
+      } else if (chosenTask.type === 'complex') {
+        Actions.complexTaskScene(payload)
+      } else {
+        console.warn(`unexpected type in chooseTask(), got: ${chosenTask.type}`)
+      }
     })
   }
 
@@ -103,6 +128,7 @@ const styles = StyleSheet.create({
     color: '#8F596A',
     fontFamily: 'Helvetica Neue',
     marginBottom: 5,
+    marginTop: 80,
     textAlign: 'center',
   }
 })
